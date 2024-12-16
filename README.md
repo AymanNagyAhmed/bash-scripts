@@ -7,7 +7,7 @@ This guide walks through deploying a Next.js application on a Digital Ocean drop
 ### Step 1: Generate ssh key to connect local machine with digital ocean
 ### Step 2: Create Droplet
 ### Step 3: Connect to the droplet using ssh & Setup dependances
-### Step 4: Setup github ssh key `Don't forget to change your_email`
+### Step 4: Setup github ssh key on your droplet `Don't forget to change your_email`
 ### Step 5: Clone and setup the project `Don't forget to change your_repo_url`
 ### Step 6: Configure Nginx `Don't forget to change your_domain`
 ### Step 7: Create ssl certificate `Don't forget to change your_email & your_domain`
@@ -34,27 +34,66 @@ For detailed instructions on generating SSH keys, please refer to [SSH Setup Gui
 09. After creation done copy `DROPLET_IP`
 
 ## Step 3: Connect to the droplet using ssh
-1. Copy setup scrips [nextjs_droplet_setup.sh](./03_nextjs_droplet_setup.sh) & [nginx_configuration.sh](./04_nginx_configuration.sh)
+1. Copy setup scrips [nextjs_droplet_setup.sh](./03_nextjs_droplet_setup.sh) & [nestjs_droplet_setup.sh](./04_nestjs_droplet_setup.sh)
  to the droplet:
 ```bash
 scp 03_nextjs_droplet_setup.sh root@YOUR_DROPLET_IPV4:/root/
+or
+scp 03_nextjs_droplet_setup.sh root@digitalocean_droplet_alias:/root/
 
-scp 04_nginx_configuration.sh root@YOUR_DROPLET_IPV4:/root/
+
+scp 04_nestjs_droplet_setup.sh root@YOUR_DROPLET_IPV4:/root/
+or
+scp 04_nestjs_droplet_setup.sh root@digitalocean_droplet_alias:/root/
 
 ```
 2. Connect to the droplet:
 ```bash
 ssh root@YOUR_DROPLET_IPV4
+or
+sh root@digitalocean_droplet_alias
+
+
 ```
 4. Make the scripts executable and run them:
 ```bash
 chmod +x 03_nextjs_droplet_setup.sh
 
-chmod +x 04_nginx_configuration.sh
+chmod +x 04_nestjs_droplet_setup.sh
 
 ./03_nextjs_droplet_setup.sh
 
-./04_nginx_configuration.sh
+./04_nestjs_droplet_setup.sh
+```
+
+## Step 4: Setup github ssh key on the droplet [SSH Setup Guide](./01_SSH_SETUP.md) `Don't forget to change your_email`
+```bash
+scp 05_guthub_sshkey_access.sh root@YOUR_DROPLET_IPV4:/root/
+
+chmod +x 05_guthub_sshkey_access.sh
+
+./05_guthub_sshkey_access.sh
+
+```
+## Step 5: Clone and setup the project `Don't forget to change your_repo_url`
+```bash
+scp 06_nextjs_project_install.sh 07_nestjs_project_install.sh root@YOUR_DROPLET_IPV4:/root/
+
+chmod +x 06_nextjs_project_install.sh 07_nestjs_project_install.sh
+
+./06_nextjs_project_install.sh 
+
+./07_nestjs_project_install.sh
+```
+
+## Step 6: Configure Nginx `Don't forget to change your_domain`
+```bash
+scp 08_create_certificate.sh 09_nginx_configuration.sh root@YOUR_DROPLET_IPV4:/root/
+
+chmod +x 08_create_certificate.sh 09_nginx_configuration.sh 
+./08_create_certificate.sh 
+
+./09_nginx_configuration.sh 
 ```
 
 

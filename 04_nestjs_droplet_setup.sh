@@ -53,17 +53,24 @@ sudo systemctl enable mysql
 sudo systemctl start mysql
 
 # Secure MySQL installation
-echo "Securing MySQL installation..."
-sudo mysql_secure_installation
+# echo "Securing MySQL installation..."
+# sudo mysql_secure_installation
 
 # Restart MySQL
 echo "Restarting MySQL..."
 sudo systemctl restart mysql
 
+# Install and configure password validation plugin
+echo "Configuring MySQL password validation..."
+mysql -u root -p <<EOF
+INSTALL PLUGIN validate_password SONAME 'validate_password.so';
+SET GLOBAL validate_password_policy = 'LOW';
+EOF
+
 # Create a new MySQL user and grant privileges
 echo "Creating a new MySQL user..."
 mysql -u root -p <<EOF
-CREATE USER 'admin'@'*' IDENTIFIED WITH mysql_native_password BY 'admin';
+CREATE USER 'admin'@'*' IDENTIFIED WITH mysql_native_password BY '@12345Admin';
 GRANT ALL PRIVILEGES ON *.* TO 'admin'@'*' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF

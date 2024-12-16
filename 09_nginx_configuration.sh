@@ -11,15 +11,18 @@ server {
     server_name your_domain;
     return 301 https://\$host\$request_uri;
 }
+
 server {
     listen 443 ssl;
     server_name your_domain;
+    
+    # SSL Configuration
     ssl_certificate /etc/letsencrypt/live/your_domain/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/your_domain/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
-    root /var/www/nextjs_app;
+    root /var/www/html/nextjs_app;
     index index.html index.htm;
 
     location / {
@@ -35,19 +38,20 @@ server {
     }
 
     location /_next/static {
-        alias /var/www/nextjs_app/.next/static;
+        alias /var/www/html/nextjs_app/.next/static;
         expires 365d;
         access_log off;
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
     location /static {
-        alias /var/www/nextjs_app/public/static;
+        alias /var/www/html/nextjs_app/public/static;
         expires 365d;
         access_log off;
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
+    # Gzip Configuration
     gzip on;
     gzip_vary on;
     gzip_proxied any;
@@ -62,9 +66,6 @@ ln -sf /etc/nginx/sites-available/nextjs_app.conf /etc/nginx/sites-enabled/
 # Test Nginx configuration
 nginx -t
 
-# Restart Nginx
-service nginx restart
-
 # Configure firewall
 echo "Configuring firewall..."
 ufw allow OpenSSH
@@ -73,11 +74,11 @@ ufw --force enable
 
 # Create directory for Next.js application
 echo "Creating application directory..."
-mkdir -p /var/www/nextjs_app
-chown -R $USER:$USER /var/www/nextjs_app
+mkdir -p /var/www/html/nextjs_app
+chown -R $USER:$USER /var/www/html/nextjs_app
 
 # Restart Nginx
-service nginx restart
+echo "Restarting Nginx..."
+systemctl restart nginx
 
-# Print setup completion message
 echo "Nginx setup completed successfully!"
