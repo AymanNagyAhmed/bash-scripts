@@ -87,6 +87,18 @@ chmod +x 06_nextjs_project_install.sh 07_nestjs_project_install.sh
 ```
 
 ## Step 6: Configure Nginx `Don't forget to change your_domain`
+1. make nginx serve your app without ssl
+2. goto YOUR_DROPLET_IPV4:PORT
+3. goto digitalocean => manage => networking => Domains
+4. after add your domain inside it => HOSTNAME (nextjs-app)
+5. Will direct to (select the drople) => create record
+6. nextjs-app.your-domain.com
+7. update nginx config file `/etc/nginx/sites-available/nextjs_app`
+8. restart nginx
+9. get ssl https://certbot.eff.org/instructions?ws=other&os=ubuntufocal
+10. enable fire wall
+
+
 ```bash
 scp 08_create_certificate.sh 09_nginx_configuration.sh root@YOUR_DROPLET_IPV4:/root/
 
@@ -112,39 +124,3 @@ echo "6. Set up SSL using: certbot --nginx -d your-domain.com"
 
 
 
-
-
-
-## Step 4: Deploy Your Application
-1. Clone your Next.js application:
-```bash
-cd /var/www/nextjs
-git clone your_repo_url .
-```
-
-2. Install dependencies and build:
-```bash
-npm install
-npm run build
-```
-
-3. Start the application with PM2:
-```bash
-pm2 start npm --name "nextjs" -- start
-pm2 save
-```
-
-4. Configure your domain:
-- Update the Nginx configuration in `/etc/nginx/sites-available/nextjs`
-- Replace `your-domain.com` with your actual domain
-
-5. Set up SSL:
-```bash
-certbot --nginx -d your-domain.com
-```
-
-6. Monitor your application:
-```bash
-pm2 status
-pm2 logs
-```

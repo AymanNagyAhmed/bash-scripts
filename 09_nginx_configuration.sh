@@ -61,24 +61,24 @@ server {
 EOF
 
 # Enable the Nginx site
-ln -sf /etc/nginx/sites-available/nextjs_app.conf /etc/nginx/sites-enabled/
+sudo ln -sf /etc/nginx/sites-available/nextjs_app.conf /etc/nginx/sites-enabled/
 
 # Test Nginx configuration
 nginx -t
 
 # Configure firewall
 echo "Configuring firewall..."
-ufw allow OpenSSH
-ufw allow 'Nginx Full'
-ufw --force enable
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw --force enable
 
 # Create directory for Next.js application
 echo "Creating application directory..."
 mkdir -p /var/www/html/nextjs_app
-chown -R $USER:$USER /var/www/html/nextjs_app
+sudo chown -R $USER:$USER /var/www/html/nextjs_app
 
 # Restart Nginx
 echo "Restarting Nginx..."
-systemctl restart nginx
+sudo systemctl restart nginx
 
 echo "Nginx setup completed successfully!"
